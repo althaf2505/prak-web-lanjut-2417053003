@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Kelas extends Model
 {
-    use HasFactory;
-    protected $guarded = ['id'];
-    public function user()
+    protected $table = 'kelas';
+
+    public function getKelas()
     {
-        return $this->hasMany(User::class);
+        return self::all();
     }
 }
