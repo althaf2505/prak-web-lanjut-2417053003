@@ -16,12 +16,20 @@
 
         <br><br>
 
+        {{-- Notifikasi sukses --}}
+        @if (session('success'))
+            <p style="color: green;">
+                {{ session('success') }}
+            </p>
+        @endif
+
         <table border="1" cellpadding="10">
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Nama Mata Kuliah</th>
                     <th>SKS</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
 
@@ -31,6 +39,29 @@
                         <td>{{ $mk->id }}</td>
                         <td>{{ $mk->nama_mk }}</td>
                         <td>{{ $mk->sks }}</td>
+
+                        <td>
+                            {{-- Tombol Edit --}}
+                            <a href="{{ route('matakuliah.edit', $mk->id) }}">
+                                Edit
+                            </a>
+
+                            |
+
+                            {{-- Tombol Hapus --}}
+                            <form action="{{ route('matakuliah.destroy', $mk->id) }}"
+                                  method="POST"
+                                  style="display: inline;">
+
+                                @csrf
+                                @method('DELETE')
+
+                                <button type="submit"
+                                        onclick="return confirm('Yakin ingin menghapus data ini?')">
+                                    Hapus
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
