@@ -8,47 +8,51 @@ use App\Models\UserModel;
 
 class UserController extends Controller
 {
-    public $userModel;
-    public $kelasModel;
-
-    public function __construct()
-    {
-        $this->userModel = new UserModel();
-        $this->kelasModel = new Kelas();
-    }
-
-    public function index()
-    {
-        $data = [
-            'title' => 'List Users',
-            'users' => $this->userModel->getUsers()
-        ];
-        return view('list_user', $data);
-    }
-
     public function create()
     {
-        return view('create_user', [
-            'title' => 'Tambah Pengguna',
-            'kelas' => $this->kelasModel->getKelas(),
-        ]);
+        $kelas = Kelas::all();
+
+        $title = 'Buat Pengguna Baru';
+
+        return view('create_user', compact('kelas', 'title'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nama' => ['required', 'string', 'max:255'],
-            'npm' => ['required', 'string', 'max:255'],
+            'nama' => ['required', 'string', 'max:100'],
+            'npm' => ['required', 'string', 'max:30'],
             'kelas_id' => ['required', 'exists:kelas,id'],
         ]);
 
-        $this->userModel->create([
+        UserModel::create([
             'Nama' => $validated['nama'],
             'Npm' => $validated['npm'],
             'kelas_id' => $validated['kelas_id'],
         ]);
 
-        return redirect()->route('user.index')->with('success', 'Pengguna berhasil ditambahkan.');
+        return to_route('user.index')->with('success', 'Data pengguna berhasil ditambahkan.');
+    }
+
+    public function index()
+    {
+        $users = UserModel::join(
+            'kelas',
+            'user.kelas_id',
+            '=',
+            'kelas.id'
+        )
+        ->select(
+            'user.id',
+            'user.Nama as nama',
+            'user.Npm as npm',
+            'kelas.nama_kelas'
+        )
+        ->orderBy('user.Nama')
+        ->get();
+
+        $title = 'Daftar Pengguna';
+
+        return view('list_user', compact('users', 'title'));
     }
 }
-

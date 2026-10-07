@@ -1,6 +1,4 @@
-@extends('layouts.app')
-
-@section('content')
+<x-layouts.app :title="$title">
     @push('styles')
         <style>
             .form-layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 56px; align-items: start; }
@@ -50,4 +48,4 @@
             <p>Nama, NPM, dan kelas akan tampil di halaman daftar pengguna setelah data berhasil disimpan.</p>
         </aside>
     </div>
-@endsection
+</x-layouts.app>

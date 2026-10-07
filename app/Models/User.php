@@ -3,29 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable
+class Kelas extends Model
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $guarded = ['id'];
 
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    protected function casts(): array
+    public function user()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->hasMany(UserModel::class, 'kelas_id');
     }
 }
