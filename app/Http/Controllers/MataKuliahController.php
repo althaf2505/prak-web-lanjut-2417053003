@@ -33,4 +33,42 @@ class MataKuliahController extends Controller
 
         return redirect('/matakuliah');
     }
+
+    // Menampilkan form edit
+    public function edit($id)
+    {
+        $mataKuliah = MataKuliah::findOrFail($id);
+
+        return view('edit_mk', compact('mataKuliah'));
+    }
+
+    // Menyimpan perubahan data
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'nama_mk' => 'required',
+            'sks' => 'required|integer',
+        ]);
+
+        $mataKuliah = MataKuliah::findOrFail($id);
+
+        $mataKuliah->update([
+            'nama_mk' => $request->nama_mk,
+            'sks' => $request->sks,
+        ]);
+
+        return redirect('/matakuliah')
+            ->with('success', 'Data mata kuliah berhasil diperbarui.');
+    }
+
+    // Menghapus data
+    public function destroy($id)
+    {
+        $mataKuliah = MataKuliah::findOrFail($id);
+
+        $mataKuliah->delete();
+
+        return redirect('/matakuliah')
+            ->with('success', 'Data mata kuliah berhasil dihapus.');
+    }
 }
